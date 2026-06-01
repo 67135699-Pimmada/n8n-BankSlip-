@@ -1,6 +1,18 @@
 # ระบบตรวจสอบสลิปโอนเงินอัตโนมัติผ่าน LINE OA (Automated Bank Slip Verification via LINE OA)
 
-ระบบทำงานอัตโนมัติ 100% ตั้งแต่รับสลิป จนบันทึกข้อมูล และตอบกลับลูกค้าแบบทันทีผ่าน LINE Official Account โดยใช้เทคโนโลยี n8n ร่วมกับ AI Vision
+ระบบทำงานอัตโนมัติ 100% ตั้งแต่รับสลิป จนบันทึกข้อมูล และตอบกลับทันทีผ่าน LINE Official Account โดยใช้เทคโนโลยี n8n ร่วมกับ AI Vision
+
+---
+
+## 🏆 Achievements
+
+> 🎉 **โปรเจกต์นี้ได้รับเลือกให้เข้าร่วมจัดแสดงและโชว์ผลงานในงาน "ICT Showcase 2026"** <p align="center">
+<p align="center">
+  <img width="500" height="300" alt="ict" src="https://github.com/user-attachments/assets/0d840797-9db2-4ecb-b4ef-3982b208019e" />
+
+  <br>
+  <em>บรรยากาศการนำเสนอผลงานในงาน ICT Showcase 2026</em>
+</p>
 
 ---
 
