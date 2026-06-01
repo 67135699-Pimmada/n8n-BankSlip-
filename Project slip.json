@@ -1,0 +1,375 @@
+{
+  "name": "Project slip",
+  "nodes": [
+    {
+      "parameters": {
+        "events": [
+          "message"
+        ]
+      },
+      "type": "@aotoki/n8n-nodes-line-messaging.lineMessagingTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "dc273ade-e1dc-432f-a4e0-bc9411b95200",
+      "name": "Line Messaging Trigger",
+      "webhookId": "74471906-4b25-4375-9359-759d394eb01f",
+      "alwaysOutputData": true,
+      "credentials": {
+        "lineMessagingApi": {
+          "id": "MGJzl6eu4euTabRF",
+          "name": "Line Messaging account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "operation": "analyze",
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-flash",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-flash"
+        },
+        "text": "วิเคราะห์รูปภาพสลิปโอนเงิน จาก ธนาคาร\nสลิปมีข้อมูลดังนี้\n- ชื่อผู้โอน (อยู่คำแหน่งด้านบน ข้างโลโก้ธนาคาร)\n- จำนวนเงิน\n- วันที่โอนเงินสำเร็จ\nวิเคราะห์รูปภาพหรือข่อความ ต้องได้ผลลัพธ์แบบนี้ตัวอย่างผลสัพธ์\n\"ชื่อผู้โอน: xxx\nวันที่โอนะ วัน-เดือน-ปี\nจำนวนเงิน: *",
+        "inputType": "binary",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        400,
+        -96
+      ],
+      "id": "549376d2-dd76-4db3-b57f-37f631745126",
+      "name": "Analyze an image",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "kCmozWwniiB4ydAW",
+          "name": "Google Gemini(PaLM) Api account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "messageId": "={{ $json.message.id }}",
+        "additionalOptions": {}
+      },
+      "type": "@aotoki/n8n-nodes-line-messaging.lineMessagingData",
+      "typeVersion": 1,
+      "position": [
+        208,
+        0
+      ],
+      "id": "ab94678d-5308-4b80-b4f7-1a253dd958c8",
+      "name": "Line Messaging Data",
+      "credentials": {
+        "lineMessagingApi": {
+          "id": "MGJzl6eu4euTabRF",
+          "name": "Line Messaging account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "130Ye6PF6QbdQayMSZL_HiHkukKaIm2GGwJrbEcykoOQ",
+          "mode": "list",
+          "cachedResultName": "เก็บข้อมูล",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/130Ye6PF6QbdQayMSZL_HiHkukKaIm2GGwJrbEcykoOQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/130Ye6PF6QbdQayMSZL_HiHkukKaIm2GGwJrbEcykoOQ/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "วันที่โอน": "={{ $json['วันที่โอน'] }}",
+            "ชื่อผู้โอน": "={{ $json['ชื่อผู้โอน'] }}",
+            "จำนวนเงิน": "={{ $json['จำนวนเงิน'] }}",
+            "หลักฐานการโอน": "={{ $('Upload file').first().json.webViewLink }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "วันที่โอน",
+              "displayName": "วันที่โอน",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "ชื่อผู้โอน",
+              "displayName": "ชื่อผู้โอน",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "จำนวนเงิน",
+              "displayName": "จำนวนเงิน",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "หลักฐานการโอน",
+              "displayName": "หลักฐานการโอน",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1024,
+        16
+      ],
+      "id": "d9aebb1e-7494-4f93-81ef-5b96c1537c63",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "NfAOKUHiMMzOvQGW",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "name": "={{ $today.format('yyyy-mm-dd')  }}_slip",
+        "driveId": {
+          "__rl": true,
+          "value": "My Drive",
+          "mode": "list",
+          "cachedResultName": "My Drive",
+          "cachedResultUrl": "https://drive.google.com/drive/my-drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "1YrHapsE4xmQcGxOZkrjDoCBcLIsjtgVM",
+          "mode": "list",
+          "cachedResultName": "ข้อมูลสลิป",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/1YrHapsE4xmQcGxOZkrjDoCBcLIsjtgVM"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        416,
+        128
+      ],
+      "id": "9d38d4d0-6f0a-4021-92a7-6544f97fbdad",
+      "name": "Upload file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "C0L4rSxy0GY65utN",
+          "name": "Google Drive OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        640,
+        16
+      ],
+      "id": "845591bf-88b8-49de-aac7-cc86ba74fc65",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "jsCode": "const text = $input.first().json.content.parts[0].text;\n\n// ปรับ Regex ให้รองรับทั้งมี \"เงิน\" และไม่มี \"เงิน\", มี \":\" และไม่มี \":\"\nconst nameMatch = text.match(/ชื่อผู้โอน\\s*:?\\s*(.+)/);\nconst dateMatch = text.match(/วันที่(?:โอนเงิน|โอน)?\\s*:?\\s*(.+)/);\nconst amountMatch = text.match(/จำนวนเงิน\\s*:?\\s*([\\d,.]+)/);\n\nreturn [{\n  json: {\n    \"วันที่โอน\": dateMatch ? dateMatch[1].trim() : \"ไม่พบข้อมูล\",\n    \"ชื่อผู้โอน\": nameMatch ? nameMatch[1].trim() : \"ไม่พบข้อมูล\",\n    \"จำนวนเงิน\": amountMatch ? parseFloat(amountMatch[1].replace(/,/g, '')) : 0\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        832,
+        16
+      ],
+      "id": "b411599b-098e-4572-a43f-b385a8179839",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "operation": "send",
+        "to": "={{ $('Line Messaging Trigger').first().json.source.userId }}",
+        "messages": {
+          "values": [
+            {
+              "text": "=บันทึกข้อมูลสลิปโอนเงินเรียบร้อยแล้ว\nวันที่โอน: {{ $json['วันที่โอน'] }}\nชือผู้โอน: {{ $json['ชื่อผู้โอน'] }}\nจำนวนเงิน: {{ $json['จำนวนเงิน'] }} บาท"
+            }
+          ]
+        }
+      },
+      "type": "@aotoki/n8n-nodes-line-messaging.lineMessaging",
+      "typeVersion": 1,
+      "position": [
+        1232,
+        16
+      ],
+      "id": "d4d135d9-d41d-4c5f-9d51-f05afe6db05f",
+      "name": "Line Messaging",
+      "credentials": {
+        "lineMessagingApi": {
+          "id": "MGJzl6eu4euTabRF",
+          "name": "Line Messaging account"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "Line Messaging Trigger": [
+      {
+        "json": {
+          "type": "message",
+          "message": {
+            "type": "image",
+            "id": "608596865910309090",
+            "quoteToken": "59cv9EW22QrK9ae9ubF1xjpjTGG9-c7ua0Wr_Ycg3YmDeaaEIFjZha71GqGRlcqRFAF3FFt_YHzpocmjROeBPzsbpygpidS5LGHzuHMFmh4EjiOdNeYttd0DeyqfNiwIQUWIMbloBk08ym4JrsQSlQ",
+            "markAsReadToken": "gYkdYqGOL99yUeqSMom0A2bjITFnIxU3IfHe0TSQ4kLHe_DgagVR8QkpqdSZzg1Bx5KAO_hsdvQ_MFauhlEK7sM-oYADxbjprnpKIhechmUodq7xIbV2wUsYqF0-8xuO0H3002ZnQFkAGCrvwS1c4sc6wGTU4Kog_taTdG_IgOmMJIypOyy41JxZdpZrtfLD_xUgLBKOPKZjlgKLwC_BjQ",
+            "contentProvider": {
+              "type": "line"
+            }
+          },
+          "webhookEventId": "01KNMG678XY0CXF2SDBGTAKT2X",
+          "deliveryContext": {
+            "isRedelivery": false
+          },
+          "timestamp": 1775583304483,
+          "source": {
+            "type": "user",
+            "userId": "U2828977a59beb831af5174ec3a045b90"
+          },
+          "replyToken": "b7300d0018344c259d7713ebe89af9d9",
+          "mode": "active",
+          "destination": "U7fc111e83c3b74393238d9992705c5e2"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Line Messaging Trigger": {
+      "main": [
+        [
+          {
+            "node": "Line Messaging Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Line Messaging Data": {
+      "main": [
+        [
+          {
+            "node": "Analyze an image",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Upload file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analyze an image": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Line Messaging",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload file": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "ea32d078-1533-4906-81ab-9fde01ec9d69",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "95bb5d8f25421e255473ea89df2b1eb20b07b4389e7664fc69c178ed3819362a"
+  },
+  "id": "eUtZecTQUxMa4poV",
+  "tags": []
+}
